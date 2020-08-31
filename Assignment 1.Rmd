@@ -1,0 +1,56 @@
+---
+title: "Week 1 Assignment"
+author: "Hilda Ramirez"
+date: "8/29/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+These data are from fivethirtyeight.com, 2020 General Election Forecast: [link](https://projects.fivethirtyeight.com/2020-election-forecast/)
+They have been running polls since June and sharing engaging visualizations with poll results and election predictions.
+
+
+## Data Acquisition & Transformation
+
+First read the raw csv file from my Github and load into a dataframe.  Verify top few rows.
+
+```{r}
+x <- read.csv(url("https://raw.githubusercontent.com/HildaRamirez/DATA-607/master/presidential_national_toplines_2020.csv"))
+election <- as.data.frame(x)
+
+head(election)
+```
+There are several columns which are either blank or trivial (e.g. incumbent is always Trump and the challenger is always Biden).  I'd like to create a simplified dataset in order to display some simple graphs.  Let's create a subset that includes model date, chance that the incumbent wins the electoral college, chance that the challenger wins the electoral college, chance that the incumbent wins the popular vote, and chance that the challenger wins the popular vote.
+
+```{r}
+election2 <- subset(election, select = c(modeldate, ecwin_inc, ecwin_chal, popwin_inc, popwin_chal))
+
+head(election2)
+```
+Now let's rename the columns:
+
+```{r}
+colnames(election2) <- c("Date","ElectoralTrump","ElectoralBiden","PopularTrump","PopularBiden")
+
+head(election2)
+```
+## FINDINGS
+
+My original intention was to use the election2 dataframe to create some simple graphs, but I struggled with how to represent the data by date (ended up with a clump of characters at the bottom of my graph).  Then I intended to do some row subsets but the data didn't lend itself all that well to that either as the numbers didn't change that much over time so it was unclear what value I would get from that.
+
+The biggest lesson I learned is to pick my data more carefully next time so that I have more to dig into.
+
+
+Sample Failed Plot below.  I will work on practicing more with the ggplot package.
+
+```{r}
+library(ggplot2)
+
+ggplot(data = election2, aes(x = Date, y = ElectoralTrump))+
+  geom_line(color = "Red", size = 2)
+```
+
